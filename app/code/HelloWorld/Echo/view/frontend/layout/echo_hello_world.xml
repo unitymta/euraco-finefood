@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<head>
+		<title>Dự báo thời tiết</title>
+	</head>
+
+	<referenceBlock name="content">
+		<block class="HelloWorld\Echo\Block\Weather" name="helloworld_echo" template="weather.phtml"></block>
+	</referenceBlock>
+</page>

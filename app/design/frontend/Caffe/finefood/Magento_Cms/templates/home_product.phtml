@@ -1,0 +1,186 @@
+<?php
+use Magento\Framework\App\Action\Action;
+
+?>
+<?php
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
+    $_productCollection = $objectManager->create('Magento\Catalog\Model\ResourceModel\Product\Collection');
+    /** Apply filters here */
+    $_productCollection->addAttributeToSelect('*');
+    $_productCollection->addCategoriesFilter(['in' => [12]]);
+    $_productCollection->setPageSize(8);
+    $_productCollection->load();
+    $_helper = $this->helper('Magento\Catalog\Helper\Output');
+    $pos = $block->getPositioned();
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+?>
+<?php if ($_productCollection->count()): ?>
+<?php
+    if ($block->getMode() == 'grid') {
+        $viewMode = 'grid';
+        $image = 'category_page_grid';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $image = 'category_page_list';
+        $showDescription = true;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+    /**
+     * Position for actions regarding image size changing in vde if needed
+     */
+    $pos = $block->getPositioned();
+    ?>
+<div class="popular-products space-div">
+    <div class="wrap clr">
+    	<div class="page-title center">
+			<h2 class="heading-h2">Popular Products</h2>
+		</div>
+        <div class="category-products">
+                <!-- new_products_content_widget_grid-->            
+                <ul class="products-grid products-grid--max-4-col e-height-cnt">
+                    <div class="regular slider">
+                        <?php foreach ($_productCollection as $_product): ?>
+                        <div>
+                        <li class="item last">
+                            <div class="product-wrapper">
+                            	<div class="product-label">
+                            		<?php
+                                        //print_r();exit;
+                                        //$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                                        $currencysymbol = 'S$';
+                                        $msrp = $_product->getMsrp();
+                                        $price = $_product->getPrice();
+                                        $finalPrice = $_product->getFinalPrice();
+                                        $save = 0; 
+                                        if($finalPrice < $price){
+                                            $save = 100 - ($finalPrice/$price) * 100;
+                                        }elseif($finalPrice < $msrp){
+                                            $save = 100 - ($finalPrice/$msrp) * 100;
+                                        }
+                                        $save = number_format($save, 0);
+                                    ?>
+                            		<?php if($finalPrice < $price): ?>
+	                                	<div class="sale-product-icon round-bg-style"><span>Sale</span></div>
+	                                <?php endif; ?>
+								</div>
+								<div class="img-view">
+	                                <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product-item-photo">
+	                                    <span class="product-image-container">
+	                                        <span class="product-image-wrapper">
+	                                            <?php
+	                                                $image = 'category_page_grid';
+	                                                $productImage = $block->getImage($_product, $image);
+	                                                if ($pos != null) {
+	                                                    $position = ' style="left:' . $productImage->getWidth() . 'px;'
+	                                                        . 'top:' . $productImage->getHeight() . 'px;"';
+	                                                }
+	                                            ?>
+	                                            <?php echo $productImage->toHtml(); ?>
+	                                        </span>
+	                                    </span>
+	                                </a>
+	                                <div class="actions btn-grid">
+										<a href"<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="btn small-btn">View Details</a>
+									</div>
+                                </div>
+                                <div class="product-info e-height-element">
+                                	<h2 class="product-name"><a title="<?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>" href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>"><?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?><span class="category-icon"></span></a></h2>
+                                    <div class="product-left">
+                                    	<div class="product-reviews-summary">
+                                    		<div class="rating-summary">
+		                                     	<span class="label"><span>Rating:</span></span>
+												<div class="rating-result" title="%">
+													<span style="width:0%"></span>
+												</div>   
+	                                        </div>
+                                        </div>
+                                        <div class="price-box" style="margin-top: 0px;" data-role="priceBox" data-product-id="<?php echo $_product->getId(); ?>">
+	                                        <span class="price-container price-final_price tax weee price-save-hide">
+	                                            <?php if($finalPrice < $price): ?>
+	                                            <span  id="old-price-6-widget-product-grid" data-price-amount="<?php echo $finalPrice; ?>" data-price-type="finalPrice" class="price-wrapper " >
+		                                            <span class="regular-price">
+		                                                <span class="price <?php if($finalPrice == $price) echo 'price-new'; ?>"><?php echo $currencysymbol .number_format($finalPrice,2); ?></span>
+		                                            </span>
+		                                            <span class="old-price">
+		                                                <span class="price"><?php echo $currencysymbol .number_format($price, 2); ?></span>
+		                                            </span>
+	                                            </span>
+	                                            <span data-price-amount="<?php echo $finalPrice; ?>" data-price-type="finalPrice" class="price-wrapper ">
+	                                                <span class="price-mrsp"><?php if($msrp) echo 'mrsp '.$currencysymbol .number_format($msrp, 2); ?></span>
+	                                            </span>
+	                                            <?php elseif($finalPrice < $msrp): ?>
+	                                            <span  id="old-price-6-widget-product-grid" data-price-amount="<?php echo $finalPrice; ?>" data-price-type="finalPrice" class="price-wrapper " >
+	                                                <span class="price <?php if($finalPrice == $price) echo 'price-new'; ?>"><?php echo $currencysymbol .number_format($finalPrice,2); ?></span>
+	                                                
+	                                            </span>
+	                                            <span data-price-amount="<?php echo $finalPrice; ?>" data-price-type="finalPrice" class="price-wrapper ">
+	                                                <span class="price-mrsp"><?php if($msrp) echo 'mrsp '.$currencysymbol .number_format($msrp, 2); ?></span>
+	                                                <span class="price-save">save <?php echo $save; ?>%</span>
+	                                            </span>
+	                                            <?php else: ?>
+	                                            <span  id="old-price-6-widget-product-grid" data-price-amount="<?php echo $finalPrice; ?>" data-price-type="finalPrice" class="price-wrapper " >
+	                                                <span class="price price-new"><?php echo $currencysymbol .number_format($finalPrice,2); ?></span>
+	                                            </span>
+	                                            <?php endif; ?>
+	                                        </span>
+	                                    </div>
+                                    </div>
+                                    
+                                    <div class="add-to-links">
+                                        <div class="actions-primary">
+                                            <?php if ($_product->isSaleable()): ?>
+                                            <?php $postParams = $block->getAddToCartPostParams($_product); ?>
+                                            <form data-role="tocart-form" action="<?php /* @escapeNotVerified */ echo $postParams['action']; ?>" method="post">
+                                                <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $postParams['data']['product']; ?>">
+                                                <input type="hidden" name="<?php /* @escapeNotVerified */ echo Action::PARAM_NAME_URL_ENCODED; ?>" value="<?php /* @escapeNotVerified */ echo $postParams['data'][Action::PARAM_NAME_URL_ENCODED]; ?>">
+                                                <?php echo $block->getBlockHtml('formkey')?>
+                                                <button type="submit"
+                                                        title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                                                        class="cart">
+                                                    <span class="whisit-bg-style link-cart"><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                                                </button>
+                                                <button type="submit"
+                                                        title="<?php echo $block->escapeHtml(__('Add wishlist')); ?>"
+                                                        class="wishlist">
+                                                    <span class="whisit-bg-style link-wishlist"><?php /* @escapeNotVerified */ echo __('Add wishlist') ?></span>
+                                                </button>
+                                            </form>
+                                        <?php else: ?>
+                                            <?php if ($_product->getIsSalable()): ?>
+                                                <div class="stock available"><span><?php /* @escapeNotVerified */ echo __('In stock') ?></span></div>
+                                            <?php else: ?>
+                                                <button title="Stock Coming Soon" type="button" class="action tocart primary coming-soon">
+																	<span>Stock Coming Soon</span>
+																</button>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                        </div>
+                                    </div>
+                                    <?php if($_product->getFreeshipping()): ?>
+                                    <div class="box-free-shipping"><span>Free <strong>shipping</strong></span>></div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </li>
+                        </div>
+                        <?php endforeach; ?>
+                        </div>
+                    </ul>
+        </div>
+    </div>
+</div>
+<!-- END popular-product -->
+<?php endif; ?>
+
+<?php if (!$block->isRedirectToCartEnabled()) : ?>
+    <script type="text/x-magento-init">
+    {
+        "[data-role=tocart-form], .form.map.checkout": {
+            "catalogAddToCart": {}
+        }
+    }
+    </script>
+<?php endif; ?>

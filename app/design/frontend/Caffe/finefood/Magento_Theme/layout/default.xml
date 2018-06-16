@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="default_head_blocks"/>
+    <body>
+		
+        <referenceContainer name="header.container">
+        	<container name="header.inner" htmlTag="header" htmlClass="header">
+	            <container name="wrap.clr" htmlClass="wrap clr" htmlTag="div" before="-">
+	                <container name="head.left" label="Head Left" htmlTag="div" htmlClass="head-left">
+	                </container>
+	                <container name="head.right" label="Head Right" htmlTag="div" htmlClass="head-right" after="head.left">
+	                	<container name="topbar.clr" htmlClass="topbar clr" htmlTag="div" before="minicart">
+	                	</container>
+	                </container>
+	            </container>
+            </container>
+        </referenceContainer>
+        
+        <referenceContainer name="footer-container">
+        	<container name="footer.content" htmlTag="div" htmlClass="footer-content">
+	        	<container name="footer.top" htmlTag="div" htmlClass="footer-top" before="-">
+	        		<container name="footer.wrap" htmlTag="div" htmlClass="wrap clr">
+		        		<container name="subscribe" htmlClass="col-md-9 col-sm-12 col-md-offset-1" htmlTag="div">
+		                </container>
+		            </container>
+		        </container>
+	        	<block class="Magento\Framework\View\Element\Template" name="footer-block" template="Magento_Theme::html/footer-block.phtml">
+        		</block>
+        	</container>
+        </referenceContainer>
+		
+		<move element="skip_to_content" destination="head.left" />
+        <move element="logo" destination="head.left" />
+        <move element="top.search" destination="head.right" before="-" />
+        <move element="top.links" destination="topbar.clr" />
+        <move element="minicart" destination="head.right" />
+        <move element="navigation.sections" destination="header.container" />
+        <move element="form.subscribe" destination="subscribe" />
+
+        <referenceBlock name="catalog.compare.link" remove="true"/>
+        <referenceBlock name="advanced-search-link" remove="true"/>
+        <referenceBlock name="page.main.title" remove="true"/>
+        <referenceBlock name="report.bugs" remove="true"/>
+        <referenceBlock name="store_switcher" remove="true"/>
+        <referenceBlock name="footer_links" remove="true"/>
+        <referenceBlock name="copyright" remove="true"/>
+       
+    </body>
+</page>

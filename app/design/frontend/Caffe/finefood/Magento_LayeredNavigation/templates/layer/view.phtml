@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Category layered navigation
+ *
+ * @var $block \Magento\LayeredNavigation\Block\Navigation
+ */
+?>
+
+<?php if ($block->canShowBlock()): ?>
+	<div class="sidebar">
+	    <div class="block-title">
+	        <h6><?= /* @escapeNotVerified */ __('Refine Search') ?></h6>
+	    </div>
+
+	    <div class="filter">
+	    	<div class="filter-list">	
+	    		<div class="filter-choices">
+			            <?= $block->getChildHtml('state') ?>
+
+			            <?php if ($block->getLayer()->getState()->getFilters()): ?>
+			                <div class="block-actions filter-actions">
+			                    <a href="<?= /* @escapeNotVerified */ $block->getClearUrl() ?>" class="action clear filter-clear"><span><?= /* @escapeNotVerified */ __('Clear All') ?></span></a>
+			                </div>
+			            <?php endif; ?>
+			            <?php $wrapOptions = false; ?>
+			            <?php foreach ($block->getFilters() as $filter): ?>
+			                <?php if (!$wrapOptions): ?>
+			                    <dl class="filter-choice expanded" id="narrow-by-list">
+			                <?php $wrapOptions = true; endif; ?>
+			                    <?php if ($filter->getItemsCount()): ?>
+			                        <dt role="heading" aria-level="3" class="filter-options-title"><h4><?= $block->escapeHtml(__($filter->getName())) ?></h4></dt>
+			                        <dd class="filter-options-content"><?= /* @escapeNotVerified */ $block->getChildBlock('renderer')->render($filter) ?></dd>
+			                    <?php endif; ?>
+			            <?php endforeach; ?>
+			            <?php if ($wrapOptions): ?>
+			                </dl>
+			            <?php endif; ?>
+		        </div>
+	    	</div>
+	    </div>
+    </div>
+<?php endif; ?>

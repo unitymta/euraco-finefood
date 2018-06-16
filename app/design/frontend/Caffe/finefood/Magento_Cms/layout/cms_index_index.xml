@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<referenceContainer name="content">
+		<block class="Magestore\Bannerslider\Block\SliderItem">
+			<action method="setSliderId">
+				<argument name="sliderId" xsi:type="string">1</argument>
+			</action>
+		</block>
+		<container name="pods" htmlTag="div" htmlClass="pods" before="home.products.bestseller" >
+    		<block class="Magento\Framework\View\Element\Template" name="solution" template="Magento_Cms::solution.phtml"></block>
+        </container>
+		<block class="Magento\Catalog\Block\Product\ListProduct" name="home.products.bestseller" as="home.products.bestseller" template="Magento_Cms::home_product_bestseller.phtml" after="pods">
+			<container name="category.product.list.additional" as="additional" />
+			<block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
+				<block class="Magento\Framework\View\Element\Template" as="default"/>
+			</block>
+		</block>
+		<block class="Magento\Catalog\Block\Product\ListProduct" name="home.products.list" as="home_product" template="Magento_Cms::home_product.phtml">
+	        <container name="category.product.list.additional" as="additional" />
+	        <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
+	            <block class="Magento\Framework\View\Element\Template" as="default"/>
+	        </block>
+	    </block>
+	</referenceContainer>
+</page>

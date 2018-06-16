@@ -1,0 +1,50 @@
+<?php
+use Magento\Framework\App\Action\Action;
+
+?>
+<?php
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
+    $_productCollection = $objectManager->create('Magento\Catalog\Model\ResourceModel\Product\Collection');
+    /** Apply filters here */
+    $_productCollection->addAttributeToSelect('*');
+    $_productCollection->setPageSize(1);
+    $_productCollection->load();
+    $_helper = $this->helper('Magento\Catalog\Helper\Output');
+?>
+<div class="social-icon">
+	<label class="share-label">Share:</label>
+	<ul class="sharing-links">
+		<?php foreach ($_productCollection as $_product): ?>
+			<li>
+				<a href="http://plus.google.com/share?url=<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="link-email-friend" title="Email">
+					<i class="fa fa-envelope" aria-hidden="true"></i>
+				</a>
+			</li>
+
+			<li>
+				<a href="http://www.facebook.com/sharer/sharer.php?u=<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>&t=TITLE_HERE" target="_blank" title="Share on Facebook" class="link-facebook">
+					<i class="fa fa-facebook" aria-hidden="true"></i>
+				</a>
+			</li>
+			
+			<li>
+				<a href="http://www.twitter.com/intent/tweet?url=<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>&via=TWITTER_HANDLE_HERE&text=TITLE_HERE" target="_blank" title="Share on Twitter" class="link-twitter">
+					<i class="fa fa-twitter" aria-hidden="true"></i>
+				</a>
+			</li>
+			
+			<li>
+				<a href="javascript:void(0)" target="_blank" title="Share on instagram" class="link-instagram">
+					<i class="fa fa-instagram" aria-hidden="true"></i>
+				</a>
+			</li>
+			
+			<li>
+				<a href="http://www.linkedin.com/shareArticle?mini=true&url=<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" target="_blank" title="Share on Pinterest" class="link-pinterest">
+					<i class="fa fa-pinterest-p" aria-hidden="true"></i>
+				</a>
+			</li>
+		 <?php endforeach; ?>
+	</ul>
+</div>

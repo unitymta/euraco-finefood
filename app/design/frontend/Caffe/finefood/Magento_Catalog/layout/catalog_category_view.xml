@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+       
+        <referenceContainer name="content">
+        	<container name="category.list" htmlClass="wrap clr" htmlTag="div">
+        		<container name="category.list.main" htmlClass="main-container clr loaded" htmlTag="div">
+        			<container name="category.list.primary" htmlClass="primary" htmlTag="div">
+			        </container>
+	        	</container>
+            </container>
+        </referenceContainer>
+
+        <move element="sidebar.main" destination="category.list.primary" after="-"/>
+        <move element="category.products" destination="category.list.primary" before="-"/>
+        <referenceBlock name="div.sidebar.additional" remove="true"/>
+        <referenceBlock name="category.product.addto.compare" remove="true"/>
+    </body>
+</page>

@@ -1,0 +1,69 @@
+<?php 
+	// customize for price, not price default
+?>
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\Framework\App\Action\Action;
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ */
+?>
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$registry = $objectManager->get('\Magento\Framework\Registry');
+$currentProduct = $registry->registry('current_product');
+$productData = $objectManager->create('Magento\Catalog\Model\Product')->load($currentProduct->getId());
+$priceHelper = $objectManager->create('Magento\Framework\Pricing\Helper\Data');
+
+
+$_productCollection = $block->getLoadedProductCollection();
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+$currencysymbol = 'S$';
+
+?>
+<?php if (!$_productCollection->count()): ?>
+    <div class="message info empty"><div><?= /* @escapeNotVerified */ __('We can\'t find products matching the selection.') ?></div></div>
+<?php else: ?>
+    <?php foreach ($_productCollection as $_product): ?>
+        <div class="box-cart clr">
+            <div class="box-price" >
+	            <div class="price-wrap">
+					<div class="price-box price-final_price" data-role="" data-product-id="<?= /* @escapeNotVerified */ $currentProduct->getId() ?>">
+					    <span class="special-price">
+							<span class="price-container price-final_price tax weee" <?= $block->getSchema() ? ' itemprop="offers" itemscope itemtype="http://schema.org/Offer"' : '' ?>>
+						        <span id="product-price-<?= /* @escapeNotVerified */ $currentProduct->getId() ?>" data-price-amount="<?php echo number_format($_product->getFinalPrice(),2) ?>" data-price-type="finalPrice" class="price-wrapper " itemprop="price"><span class="price"><?php echo $currencysymbol . number_format($_product->getFinalPrice(),2) ?></span></span>
+						                <meta itemprop="price" content="<?php echo number_format($_product->getFinalPrice(),2) ?>">
+						    </span>
+					    </span>
+					    <span class="old-price">
+							<span class="price-container price-final_price tax weee">
+					        	<span id="old-price-22" data-price-amount="<?php echo number_format($_product->getPrice(),2)  ?>" data-price-type="oldPrice" class="price-wrapper "><span class="price"><?php echo $currencysymbol . number_format($_product->getPrice(),2) ?></span></span>
+					        </span>
+					    </span>
+					</div>
+				</div>
+			</div>
+        </div>
+    <?php endforeach; ?>
+    <?php if (!$block->isRedirectToCartEnabled()) : ?>
+        <script type="text/x-magento-init">
+        {
+            "[data-role=tocart-form], .form.map.checkout": {
+                "catalogAddToCart": {
+                    "product_sku": "<?= /* @NoEscape */ $_product->getSku() ?>"
+                }
+            }
+        }
+        </script>
+    <?php endif; ?>
+<?php endif; ?>

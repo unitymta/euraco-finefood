@@ -1,0 +1,13 @@
+<?php
+// get current page URL
+$URL = $this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+// get current product name & ID
+$objectManager  = \Magento\Framework\App\ObjectManager::getInstance();
+$product        = $objectManager->get('Magento\Framework\Registry')->registry('current_product');
+ 
+$id 	  = $product->getId();
+$title 	= $product->getName();
+?>
+<div class="name">
+	<h1 class="page-title"><?php /* @escapeNotVerified */ echo $title; ?></h1>
+</div>

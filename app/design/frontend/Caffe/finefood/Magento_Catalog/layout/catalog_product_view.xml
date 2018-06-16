@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+        	<container name="product.main" htmlTag="div" htmlClass="product-main clr" before="-">
+    			<container name="product.main.wrap" htmlTag="div" htmlClass="wrap clr">
+    				<container name="product.main.row" htmlTag="div" htmlClass="row">
+		            </container>
+            	</container>
+            </container>
+        </referenceContainer>
+        <referenceContainer name="product.info.media" htmlId="productGallery" htmlClass="gallery col-xs-12 col-sm-6 col-md-6">
+        </referenceContainer>
+
+        <block class="Magento\Catalog\Block\Product\ListProduct" name="category.products.name" as="product_name_detail" template="Magento_Catalog::product/product_name.phtml" before="-">
+    	</block>
+        <block class="Magento\Framework\View\Element\Template" name="social.product" template="Magento_Catalog::product/view/social.phtml">
+        </block>
+        <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.specifications" template="Magento_Catalog::product/view/attribute.phtml" group="detailed_info">
+            <arguments>
+                <argument name="at_call" xsi:type="string">getSpec_attr</argument>
+                <argument name="at_code" xsi:type="string">spec_attr</argument>
+                <argument name="css_class" xsi:type="string">specifications</argument>
+                <argument name="at_label" xsi:type="string">none</argument>
+                <argument name="title" translate="true" xsi:type="string">Specifications</argument>
+            </arguments>
+        </block>
+
+        <referenceContainer name="content.aside">
+            <block class="Magento\Catalog\Block\Product\ProductList\Crosssell" name="product.info.crosssell" template="Magento_Catalog::product/list/items.phtml">
+                <arguments>
+                    <argument name="type" xsi:type="string">crosssell</argument>
+                </arguments>
+                <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="crosssell.product.addto" as="addto">
+                    <block class="Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare"
+                           name="crosssell.product.addto.compare" as="compare"
+                           template="Magento_Catalog::product/list/addto/compare.phtml"/>
+                </block>
+            </block>
+        </referenceContainer>
+
+        <referenceBlock name="product.info.stock.sku" remove="true"/>
+        <referenceBlock name="product.info.mailto" remove="true"/>
+        <referenceBlock name="view.addto.compare" remove="true"/>
+        <referenceBlock name="product.info.overview" remove="true"/>
+
+        <move element="product.info.main" destination="product.main.row" after="product.info.media"/>
+        <move element="product.info.media" destination="product.main.row" before="-"/>
+        <move element="category.products.name" destination="product.info.main" before="-"/>
+        <move element="social.product" destination="product.info.main" after="-"/>
+        <move element="product.info.addto" destination="product.info.addtocart" after="-"/>
+        <move element="product.info.specifications" destination="product.info.details" before="-"/>
+    </body>
+</page>
